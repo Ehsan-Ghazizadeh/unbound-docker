@@ -1,0 +1,29 @@
+version: "3"
+services:
+  unbound:
+    container_name: unbound
+    image: "mvance/unbound:latest"
+    network_mode: bridge
+    ports:
+      - target: 53
+        published: 53
+        protocol: tcp
+      - target: 53
+        published: 53
+        protocol: udp
+    volumes:
+      - type: bind
+        source: ./config/unbound.conf
+        target: /opt/unbound/etc/unbound/unbound.conf
+      - type: bind
+        source: ./config/forward-records.conf
+        target: /opt/unbound/etc/unbound/forward-records.conf
+      - type: bind
+        source: ./config/a-records.conf
+        target: /opt/unbound/etc/unbound/a-records.conf
+    restart: unless-stopped
+    environment:
+      - TZ=Asia/Tehran
+
+volumes:
+  mydata:
